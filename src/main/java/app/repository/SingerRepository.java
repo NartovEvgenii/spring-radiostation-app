@@ -1,16 +1,8 @@
 package app.repository;
 
 import app.domain.Singer;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+public interface SingerRepository extends JpaRepository<Singer, Long> {
 
-public interface SingerRepository {
-
-    List<Singer> getAll();
-
-    Singer findById(UUID id_singer);
-
-    void addSinger(Singer singer);
 }

@@ -1,16 +1,8 @@
 package app.repository;
 
-import app.domain.Music;
 import app.domain.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.UUID;
+public interface OrderRepository extends JpaRepository<Order, Long> {
 
-public interface OrderRepository {
-
-    List<Order> getAll();
-
-    Order findById(UUID id_order);
-
-    void addOrder(Order order);
 }

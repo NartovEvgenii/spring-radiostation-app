@@ -1,17 +1,12 @@
 package app.repository;
 
 import app.domain.Music;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
-public interface MusicRepository {
+public interface MusicRepository extends JpaRepository<Music, Long> {
 
-    List<Music> getAll();
+    Optional<Music> findByTitle(String title);
 
-    Music findById(UUID id_music);
-
-    Music findByTitle(String musicTitle);
-
-    void addMusic(Music music);
 }

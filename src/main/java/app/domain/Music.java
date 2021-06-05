@@ -2,88 +2,43 @@ package app.domain;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+@Entity
+@Table(name = "music")
+@Data
 public class Music {
 
-    private UUID id_music = UUID.randomUUID();
+    @Id
+    @Column(name = "idMusic")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idMusic;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "duration")
     private Duration duration;
 
-    private Genre genre;
-
-    private List<Singer> singers;
-
+    @Column(name = "rating")
     private Double rating;
 
-    public Music(String title, Duration duration, Genre genre) {
-        this.title = title;
-        this.duration = duration;
-        this.genre = genre;
-        this.rating = Double.valueOf(0);
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "music_has_genre", joinColumns = @JoinColumn(name = "music_id", referencedColumnName = "idMusic"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "idGenre"))
+    private List<Genre> genres;
 
-    @Override
-    public String toString() {
-        return "Music{" +
-                "id_music=" + id_music +
-                ", title='" + title + '\'' +
-                ", duration=" + duration +
-                ", genre=" + genre +
-                ", singers=" + singers +
-                ", rating=" + rating +
-                '}';
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "music_has_singer", joinColumns = @JoinColumn(name = "music_id", referencedColumnName = "idMusic"),
+            inverseJoinColumns = @JoinColumn(name = "singer_id", referencedColumnName = "idSinger"))
+    private List<Singer> singers;
 
-    public UUID getId_music() {
-        return id_music;
-    }
+    @OneToMany(mappedBy = "music")
+    private List<Program> programs = new ArrayList<>();
 
-    public void setId_music(UUID id_music) {
-        this.id_music = id_music;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public List<Singer> getSingers() {
-        return singers;
-    }
-
-    public void setSingers(List<Singer> singers) {
-        this.singers = singers;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
+    @OneToMany(mappedBy = "music")
+    private List<Order> orders = new ArrayList<>();
 }

@@ -1,16 +1,8 @@
 package app.repository;
 
-import app.domain.Genre;
 import app.domain.Program;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.UUID;
+public interface ProgramRepository extends JpaRepository<Program, Long> {
 
-public interface ProgramRepository {
-
-    List<Program> getAll();
-
-    Program findById(UUID id_program);
-
-    void addProgram(Program program);
 }

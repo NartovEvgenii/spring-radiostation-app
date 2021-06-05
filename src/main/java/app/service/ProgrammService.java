@@ -1,12 +1,14 @@
 package app.service;
 
 import app.domain.Program;
+import app.dto.ProgramDto;
+import app.mapper.ProgramMapper;
 import app.repository.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class ProgrammService {
@@ -14,15 +16,30 @@ public class ProgrammService {
     @Autowired
     private ProgramRepository programRepository;
 
-    public List<Program> getAll() {
-        return programRepository.getAll();
+    @Autowired
+    private ProgramMapper programMapper;
+
+    public List<ProgramDto> getAll() {
+        List<Program> programs = programRepository.findAll();
+        return programMapper.listProgramToListDto(programs);
     }
 
-    public Program findById(UUID id_program) {
-        return programRepository.findById(id_program);
+    public ProgramDto findById(Long programId) {
+        Optional<Program> program = programRepository.findById(programId);
+        return program.map(programMapper::programToDto).orElse(null);
     }
 
-    public void addProgram(Program program) {
-        programRepository.addProgram(program);
+    public ProgramDto addProgram(ProgramDto programDto) {
+        Program program = programMapper.dtoToProgram(programDto);
+        program = programRepository.save(program);
+        return programMapper.programToDto(program);
+    }
+
+    public void deleteAllProgram(){
+        programRepository.deleteAll();
+    }
+
+    public void deleteProgramById(Long programId){
+        programRepository.deleteById(programId);
     }
 }

@@ -1,17 +1,11 @@
 package app.repository;
 
 import app.domain.RadioBroadcast;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
-public interface RadioBroadcastRepository {
+public interface RadioBroadcastRepository extends JpaRepository<RadioBroadcast, Long> {
 
-    List<RadioBroadcast> getAll();
-
-    RadioBroadcast findById(UUID id_radioBroadcast);
-
-    RadioBroadcast findByName(String name_radio);
-
-    void addProgram(RadioBroadcast radioBroadcast);
+    Optional<RadioBroadcast> findByNameRadio(String nameRadio);
 }

@@ -1,11 +1,14 @@
 package app.service;
 
 import app.domain.Singer;
+import app.dto.SingerDto;
+import app.mapper.SingerMapper;
 import app.repository.SingerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -14,15 +17,30 @@ public class SingerService {
     @Autowired
     private SingerRepository singerRepository;
 
-    public List<Singer> getAll() {
-        return singerRepository.getAll();
+    @Autowired
+    private SingerMapper singerMapper;
+
+    public List<SingerDto> getAll() {
+        List<Singer> singers = singerRepository.findAll();
+        return singerMapper.listSingerToListDto(singers);
     }
 
-    public Singer findById(UUID id_singer) {
-        return singerRepository.findById(id_singer);
+    public SingerDto findById(Long singerId) {
+        Optional<Singer> singer = singerRepository.findById(singerId);
+        return singer.map(singerMapper::singerToDto).orElse(null);
     }
 
-    public void addSinger(Singer singer) {
-        singerRepository.addSinger(singer);
+    public SingerDto addSinger(SingerDto singerDto) {
+        Singer singer = singerMapper.dtoToSinger(singerDto);
+        singer = singerRepository.save(singer);
+        return singerMapper.singerToDto(singer);
+    }
+
+    public void deleteAllSinger(){
+        singerRepository.deleteAll();
+    }
+
+    public void deleteSingerById(Long singerId){
+        singerRepository.deleteById(singerId);
     }
 }
